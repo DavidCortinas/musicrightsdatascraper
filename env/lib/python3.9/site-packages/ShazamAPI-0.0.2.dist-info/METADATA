@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: ShazamAPI
+Version: 0.0.2
+Summary: Fully reverse engeenired shazam api
+Home-page: https://github.com/Numenorean/ShazamAPI
+Author: Numenorean
+Author-email: author@example.com
+License: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: pydub
+Requires-Dist: numpy
+
+# Shazam Api
+
+### Usage
+```python
+from ShazamAPI import Shazam
+
+mp3_file_content_to_recognize = open('a.mp3', 'rb').read()
+
+shazam = Shazam(mp3_file_content_to_recognize)
+recognize_generator = shazam.recognizeSong()
+while True:
+	print(next(recognize_generator)) # current offset & shazam response to recognize requests
+```
+
+### Credits to:
+https://github.com/marin-m/SongRec
+
