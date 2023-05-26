@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Box, Button, Card, CardHeader, CircularProgress, FormControl, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -28,24 +28,25 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
   const [isLoading, setIsLoading] = useState(false); 
 
 
-  const onSubmit = async () => {
-    setIsLoading(true);
+    const onSubmit = async () => {
+        console.log("SUBMIT")
+        setIsLoading(true);
+        console.log("isLoading?")
+        console.log(isLoading)
 
     const newQuery = {
-      song: songValue,
-      performer: performerValue,
+        song: songValue,
+        performer: performerValue,
     };
-
     try {
-      const songData = await onSearchPressed(newQuery);
-      onDataLoaded(songData, newQuery);
+        const songData = await onSearchPressed(newQuery);
+        onDataLoaded(songData, newQuery);
+        setIsLoading(false);
     } catch (error) {
-      console.log('Error: ', error);
-    } finally {
-      setIsLoading(false);
+        console.log('Error: ', error);
+        setIsLoading(false);
     }
-  };
-
+};
 
 
   const classes = useStyles();

@@ -36,7 +36,7 @@ export const searchSongRequest = query => async dispatch => {
     return songData
   } catch (error) {
     console.log('Error: ' + error.message);
-    alert('We had trouble finding that song. Please make sure you are spelling the song correctly and enter the performer for the quickest and most accurate search result')
+    // alert('We had trouble finding that song. Please make sure you are spelling the song correctly and enter the performer for the quickest and most accurate search result')
     dispatch(searchSongSuccess({ascap_results: {}, bmi_results: {}}, {song: '', performer: ''}))
   }
 };

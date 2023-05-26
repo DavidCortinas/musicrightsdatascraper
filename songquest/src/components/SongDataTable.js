@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MaterialReactTable from 'material-react-table';
-import { IconButton, Tooltip, Typography } from '@mui/material';
+import { IconButton, Tooltip, Snackbar } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { searchSongRequest } from '../thunks';
 import SongForm from './SongForm';
 
 const isEmptyObject = (obj) => {
@@ -113,21 +112,19 @@ const Table = ({ songData }) => {
         </Tooltip>
       )}
     />
-  );
+  )
 };
 
 const SongDataTable = ({ onSearchPressed, onDataLoaded, query, dataLoaded, songData }) => {
   const queryClient = new QueryClient();
-  // console.log(songData)
-  // const showTable = !isEmptyObject(songData.ascap_results) || !isEmptyObject(songData.bmi_results)
-  // console.log(dataLoaded())
+  const showTable = !isEmptyObject(songData)
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!dataLoaded ? (
-        <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} query={query} />
-      ) : (
+      {showTable ? (
         <Table songData={songData}/>
+      ) : (
+        <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} query={query} />
       )}
     </QueryClientProvider>
   );
