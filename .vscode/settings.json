@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./musicrights/musicrights",
+        "./musicrights"
+    ]
+}
