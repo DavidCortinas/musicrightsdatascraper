@@ -5,41 +5,45 @@ import SongForm from './components/SongForm';
 import SongDataTable from './components/SongDataTable';
 import { searchSongRequest } from './thunks';
 import { connect } from 'react-redux';
-import { dataLoaded } from './actions';
+import { searchSongSuccess } from './actions';
 
-const AppContainer = ({ onDataLoaded }) => {
+const AppContainer = (dataLoaded) => {
     const [query, setQuery] = useState({ song: '', performer: '' });
-    const [dataLoaded, setDataLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSearchPressed = (query) => {
+    const onSearchPressed = (query) => {
         setQuery(query);
     };
 
-    const handleDataLoaded = () => {
-        setDataLoaded(true);
+    const onDataLoaded = () => {
+        console.log('SET')
+        setIsLoading(false)
     };
 
-    console.log(dataLoaded)
+    // console.log(dataLoaded())
+    console.log(dataLoaded.dataLoaded)
+    console.log(isLoading)
 
     return (
         <Container maxWidth='xl'>
             <HideAppBar />
             <br />
-            {dataLoaded ? (
+            {dataLoaded.dataLoaded ? (
                 <SongDataTable 
                     query={query} 
-                    onSearchPressed={handleSearchPressed} 
-                    onDataLoaded={handleDataLoaded} 
+                    onSearchPressed={onSearchPressed} 
+                    onDataLoaded={onDataLoaded} 
                     dataLoaded={dataLoaded}
                 />
             ) : (
-                <SongForm onSearchPressed={handleSearchPressed} onDataLoaded={handleDataLoaded} />
+                <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} />
     )}
         </Container>
     );
 };
 
 const mapStateToProps = (state) => {
+    console.log(state)
   return {
     query: state.song.query || {},
     dataLoaded: state.song.dataLoaded || false,
@@ -48,12 +52,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleSearchPressed: (query) => {
+    onSearchPressed: (query) => {
       // Dispatch the searchSongRequest action here
       dispatch(searchSongRequest(query));
     },
-    onDataLoaded: () => {
-      dispatch(dataLoaded());
+    onDataLoaded: (songData, query) => {
+      dispatch(searchSongSuccess(songData, query));
     },
   };
 };

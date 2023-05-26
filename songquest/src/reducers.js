@@ -2,7 +2,8 @@ import { SEARCH_SONG, SEARCH_SONG_SUCCESS } from "./actions";
 
 const initialState = {
   query: {song: '', performer: ''},
-  songData: {ascap_results: {}, bmi_results: {}}
+  songData: {ascap_results: {}, bmi_results: {}},
+  dataLoaded: false,
 }
 
 export const song = (state = initialState, action) => {
@@ -14,6 +15,7 @@ export const song = (state = initialState, action) => {
       return {
         ...state,
         query: payload.query,
+        dataLoaded: false,
       };
     }
     case SEARCH_SONG_SUCCESS: {
@@ -22,9 +24,13 @@ export const song = (state = initialState, action) => {
         ...state,
         songData: payload.songData,
         query: payload.query, // Update the query in the state
+        dataLoaded: true,
       };
     }
-    default:
-      return state;
+    default: 
+      return {
+        ...state,
+        dataLoaded: false,
+      };
   }
 };

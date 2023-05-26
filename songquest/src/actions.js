@@ -1,25 +1,18 @@
 export const SEARCH_SONG = 'SEARCH_SONG';
-export const searchSong = (songData, query) => {
+export const searchSong = (songData, query, dataLoaded) => {
   console.log(songData)
   console.log(query)
   return (
   {
     type: SEARCH_SONG,
-    payload: { songData, query },
+    payload: { songData, query, dataLoaded },
 });}
 
 export const SEARCH_SONG_SUCCESS = 'SEARCH_SONG_SUCCESS';
-export const searchSongSuccess = (songData, query) => {
+export const searchSongSuccess = (songData, query, dataLoaded) => {
   console.log(songData)
   console.log(query)
   return ({
   type: SEARCH_SONG_SUCCESS,
-  payload: { songData, query }, // Include the query in the payload
+  payload: { songData, query, dataLoaded }, // Include the query in the payload
 });}
-
-export const DATA_LOADED = 'DATA_LOADED';
-export const dataLoaded = () => {
-  return {
-    type: DATA_LOADED,
-  };
-};

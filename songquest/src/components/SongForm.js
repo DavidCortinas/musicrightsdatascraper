@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Box, Button, Card, CardHeader, CircularProgress, FormControl, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -35,13 +35,17 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
       song: songValue,
       performer: performerValue,
     };
-    const songData = await onSearchPressed(newQuery);
 
-    console.log(songData)
-
-    setIsLoading(false);
-    onDataLoaded(songData, newQuery);
+    try {
+      const songData = await onSearchPressed(newQuery);
+      onDataLoaded(songData, newQuery);
+    } catch (error) {
+      console.log('Error: ', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
 
 
   const classes = useStyles();
@@ -103,10 +107,7 @@ console.log(state)
 };
 
 const mapDispatchToProps = dispatch => ({
-    onSearchPressed: async (query) => {
-        const songData = await dispatch(searchSongRequest(query));
-        return songData;
-    },
+    onSearchPressed: (query) => dispatch(searchSongRequest(query)),
     onDataLoaded: (songData, query) => dispatch(searchSongSuccess(songData, query))
 })
 

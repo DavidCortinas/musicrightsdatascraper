@@ -120,7 +120,7 @@ const SongDataTable = ({ onSearchPressed, onDataLoaded, query, dataLoaded, songD
   const queryClient = new QueryClient();
   // console.log(songData)
   // const showTable = !isEmptyObject(songData.ascap_results) || !isEmptyObject(songData.bmi_results)
-  console.log(dataLoaded)
+  // console.log(dataLoaded())
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -137,6 +137,7 @@ const mapStateToProps = (state) => {
   return {
     query: state.song.query || {},
     songData: state.song.songData || {},
+    dataLoaded: state.song.dataLoaded || {},
   };
 };
 
