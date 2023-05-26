@@ -16,3 +16,10 @@ export const searchSongSuccess = (songData, query) => {
   type: SEARCH_SONG_SUCCESS,
   payload: { songData, query }, // Include the query in the payload
 });}
+
+export const DATA_LOADED = 'DATA_LOADED';
+export const dataLoaded = () => {
+  return {
+    type: DATA_LOADED,
+  };
+};

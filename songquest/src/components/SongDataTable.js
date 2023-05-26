@@ -120,10 +120,11 @@ const SongDataTable = ({ onSearchPressed, onDataLoaded, query, dataLoaded, songD
   const queryClient = new QueryClient();
   // console.log(songData)
   // const showTable = !isEmptyObject(songData.ascap_results) || !isEmptyObject(songData.bmi_results)
+  console.log(dataLoaded)
 
   return (
     <QueryClientProvider client={queryClient}>
-      {dataLoaded ? (
+      {!dataLoaded ? (
         <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} query={query} />
       ) : (
         <Table songData={songData}/>
