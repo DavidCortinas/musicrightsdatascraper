@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export const SongForm = ({ onSearchPressed, onDataLoaded, songData }) => {
+export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
   const { handleSubmit } = useForm();
   const [songValue, setSongValue] = useState('');
   const [performerValue, setPerformerValue] = useState('');
@@ -35,10 +35,12 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, songData }) => {
       song: songValue,
       performer: performerValue,
     };
-    await onSearchPressed(newQuery);
+    const songData = await onSearchPressed(newQuery);
+
+    console.log(songData)
 
     setIsLoading(false);
-    onDataLoaded(songData, newQuery)
+    onDataLoaded(songData, newQuery);
   };
 
 
@@ -101,7 +103,10 @@ console.log(state)
 };
 
 const mapDispatchToProps = dispatch => ({
-    onSearchPressed: query => dispatch(searchSongRequest(query)),
+    onSearchPressed: async (query) => {
+        const songData = await dispatch(searchSongRequest(query));
+        return songData;
+    },
     onDataLoaded: (songData, query) => dispatch(searchSongSuccess(songData, query))
 })
 

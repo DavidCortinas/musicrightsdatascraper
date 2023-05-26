@@ -53,7 +53,6 @@ const Table = ({ songData }) => {
 
     const ascapResults = songData.ascap_results || {};
     const bmiResults = songData.bmi_results || {};
-    console.log(ascapResults)
 
     if (isEmptyObject(ascapResults) && isEmptyObject(bmiResults)) {
         return []
@@ -116,19 +115,26 @@ const Table = ({ songData }) => {
   );
 };
 
-const SongDataTable = ({ onSearchPressed, onDataLoaded, query }) => {
+const SongDataTable = ({ onSearchPressed, onDataLoaded, songData, query }) => {
   const queryClient = new QueryClient();
+  console.log(songData)
+  const showTable = !isEmptyObject(songData.ascap_results) || !isEmptyObject(songData.bmi_results)
 
   return (
     <QueryClientProvider client={queryClient}>
+      {songData ? (
       <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} query={query} />
+      ) : (
+        <Table songData={songData}/>
+      )}
     </QueryClientProvider>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    query:state.song.query || {},
+    query: state.song.query || {},
+    songData: state.song.songData || {},
   };
 };
 
