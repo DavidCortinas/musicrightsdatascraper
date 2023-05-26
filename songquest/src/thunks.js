@@ -24,12 +24,16 @@ export const searchSongRequest = query => async dispatch => {
     }
 
     const songData = await response.json();
+    console.log(songData)
 
     // Update the front end with the received data
     // Dispatch both searchSong and searchSongSuccess actions
     dispatch(searchSong(songData, query)); 
+    console.log(songData)
     // Dispatch searchSong action
     dispatch(searchSongSuccess(songData, query)); // Dispatch searchSongSuccess action with the query
+    console.log(songData)
+    return songData
   } catch (error) {
     console.log('Error: ' + error.message);
     alert('We had trouble finding that song. Please make sure you are spelling the song correctly and enter the performer for the quickest and most accurate search result')
