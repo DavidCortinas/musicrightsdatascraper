@@ -21,7 +21,12 @@ const AppContainer = () => {
             <HideAppBar />
             <br />
             {dataLoaded ? (
-                <SongDataTable query={query} onSearchPressed={handleSearchPressed} onDataLoaded={handleDataLoaded}/>
+                <SongDataTable 
+                    query={query} 
+                    onSearchPressed={handleSearchPressed} 
+                    onDataLoaded={handleDataLoaded} 
+                    dataLoaded={dataLoaded}
+                />
             ) : (
                 <SongForm onSearchPressed={handleSearchPressed} onDataLoaded={handleDataLoaded} />
     )}
