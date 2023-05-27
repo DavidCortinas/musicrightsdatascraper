@@ -156,6 +156,7 @@ def get_results(song, performer):
                 ['No phone number listed'])
             publishers_email_list.append(
                 emails) if emails else publishers_email_list.append(['No email listed'])
+            print(title)
 
             print(f'ASCAP Page Result: {r}')
             r += 1
@@ -171,7 +172,7 @@ def get_results(song, performer):
 
         # Click on the "Next" button
         next_button.click()
-
+    print("CREATE DATA")
     # Create df and export
     data = {
         'title': titles,
@@ -183,6 +184,8 @@ def get_results(song, performer):
         'publishers_email': publishers_email_list,
         # 'publishers_website': publishers_website_list,
     }
+    print("CREATE DATA FINISHED")
+    print(data)
 
     df = pd.DataFrame(data)
     # df.to_csv('ascap.csv', index=False)
