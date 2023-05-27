@@ -1,4 +1,6 @@
 import TextField from "@mui/material/TextField";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Box, Button, Card, CardHeader, CircularProgress, FormControl, Grid } from "@mui/material";
@@ -27,12 +29,26 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
   const [performerValue, setPerformerValue] = useState('');
   const [isLoading, setIsLoading] = useState(false); 
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
 
-    const onSubmit = async () => {
-        console.log("SUBMIT")
-        setIsLoading(true);
-        console.log("isLoading?")
-        console.log(isLoading)
+  const [invalidSearch, setInvalidSearch] = useState(false);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const onSubmit = async () => {
+    if (songValue === '') {
+      // Empty song value, set invalidSearch to true and exit the onSubmit process
+      setInvalidSearch(true);
+      return;
+    }
+    setIsLoading(true);
 
     const newQuery = {
         song: songValue,
@@ -48,10 +64,20 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
     }
 };
 
+const handleSongChange = (e) => {
+    setInvalidSearch(false)
+    setSongValue(e.target.value)
+}
+const handlePerformerChange = (e) => setPerformerValue(e.target.value)
+const handleReset = () => {
+        setInvalidSearch(false)
+        setSongValue("");
+        setPerformerValue("")
+    }
 
   const classes = useStyles();
 
-  return isLoading ? (
+  return isLoading && !invalidSearch ? (
     <>
         <Box display='flex' justifyContent='center' alignItems='center' height='30vh'>
             <CardHeader 
@@ -73,11 +99,22 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
                     subheaderTypographyProps={{ width: "28rem" }}
                 />
                 <Box display='flex' justifyContent='center'>
-                    <TextField InputLabelProps={{ shrink: true }} autoFocus variant="outlined" required className={classes.textField} onChange={(e) => setSongValue(e.target.value)} value={songValue} label="Song" />
+                    <TextField 
+                        InputLabelProps={{ shrink: true }} 
+                        autoFocus 
+                        variant="outlined" 
+                        error={invalidSearch} 
+                        required 
+                        className={classes.textField} 
+                        onChange={handleSongChange} 
+                        value={songValue} 
+                        label={invalidSearch ? "Error" : "Song"}
+                        helperText={invalidSearch ? 'Song title is required' : null}
+                     />
                 </Box>
                 <br />
                 <Box display='flex' justifyContent='center'>
-                    <TextField InputLabelProps={{ shrink: true }} variant="outlined" className={classes.textField} onChange={(e) => setPerformerValue(e.target.value)} value={performerValue} label="Performer" />
+                    <TextField InputLabelProps={{ shrink: true }} variant="outlined" className={classes.textField} onChange={handlePerformerChange} value={performerValue} label="Performer" />
                 </Box>
                 <br />
                 <br />
@@ -85,10 +122,7 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
                     <Button className={classes.button} onClick={handleSubmit(onSubmit)}>Submit</Button>
                     <Button 
                         className={classes.button} 
-                        onClick={() => {
-                            setSongValue("");
-                            setPerformerValue("")
-                    }}>
+                        onClick={handleReset}>
                         Reset
                     </Button>
                 </Grid>

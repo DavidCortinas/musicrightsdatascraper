@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MaterialReactTable from 'material-react-table';
-import { IconButton, Tooltip, Snackbar } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SongForm from './SongForm';
 
@@ -11,7 +11,6 @@ const isEmptyObject = (obj) => {
 };
 
 const Table = ({ songData }) => {
-  console.log("TABLE")
   const columns = React.useMemo(
     () => [
       {

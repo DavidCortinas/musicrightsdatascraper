@@ -4,31 +4,34 @@ import { HideAppBar } from './components/HideAppBar';
 import SongForm from './components/SongForm';
 import SongDataTable from './components/SongDataTable';
 import { searchSongRequest } from './thunks';
-import { connect } from 'react-redux';
-import { searchSongSuccess } from './actions';
+import { connect, useDispatch } from 'react-redux';
+import { clearSearchSongError, searchSongSuccess } from './actions';
+import { Alert, Snackbar, Typography } from '@mui/material';
 
-const AppContainer = (dataLoaded) => {
+const AppContainer = ({ dataLoaded, error }) => {
     const [query, setQuery] = useState({ song: '', performer: '' });
     const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
+
+    const handleSnackbarClose = () => {
+        dispatch(clearSearchSongError());
+    }
 
     const onSearchPressed = (query) => {
         setQuery(query);
     };
 
     const onDataLoaded = () => {
-        console.log('SET')
         setIsLoading(false)
     };
 
-    // console.log(dataLoaded())
-    console.log(dataLoaded.dataLoaded)
-    console.log(isLoading)
+    const dataLoadedSuccess = dataLoaded && !error
 
     return (
         <Container maxWidth='xl'>
             <HideAppBar />
             <br />
-            {dataLoaded.dataLoaded ? (
+            {dataLoadedSuccess ? (
                 <SongDataTable 
                     query={query} 
                     onSearchPressed={onSearchPressed} 
@@ -36,17 +39,36 @@ const AppContainer = (dataLoaded) => {
                     dataLoaded={dataLoaded}
                 />
             ) : (
+            <>
                 <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} />
+                {/* Snackbar for displaying errors */}
+                <Snackbar 
+                    open={!!error} 
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+                >
+                    <Alert 
+                        onClose={handleSnackbarClose} 
+                        severity="error" 
+                        elevation={6} 
+                        variant="filled"
+                    >
+                        <Typography>
+                            {"There were no results returned for your search, please make sure the song's spelling is correct and enter the performer for more accurate search results"}
+                        </Typography>
+                    </Alert>
+                </Snackbar>        
+            </>
     )}
         </Container>
     );
 };
 
 const mapStateToProps = (state) => {
-    console.log(state)
   return {
     query: state.song.query || {},
     dataLoaded: state.song.dataLoaded || false,
+    error: state.song.error // Add the error property
   };
 };
 
