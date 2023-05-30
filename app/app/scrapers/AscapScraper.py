@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 from ..SongId import get_track_artist, get_track_title
 
 
-def get_results(song, performer):
+def get_ascap_results(song, performer):
     options = Options()
     options.add_argument("--incongnito")
     options.add_argument("--headless")
@@ -86,6 +86,14 @@ def get_results(song, performer):
                 expand_all.click()
             except:
                 pass
+
+        try:
+            no_results = driver.find_element(By.CLASS_NAME, 'c-empty-state')
+            if no_results:
+                print("NO ASCAP RESULTS")
+                return {}
+        except:
+            pass
 
         results = WebDriverWait(driver, 20).until(
             EC.presence_of_all_elements_located((By.TAG_NAME, 'article'))

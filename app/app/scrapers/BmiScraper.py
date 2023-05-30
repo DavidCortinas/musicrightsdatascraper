@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def get_results(song, performer):
+def get_bmi_results(song, performer):
     # Find results
     options = Options()
     options.add_argument("--incognito")
@@ -68,6 +68,14 @@ def get_results(song, performer):
             EC.presence_of_all_elements_located((By.CLASS_NAME, "opener-icon")))
         for button in open_buttons:
             driver.execute_script("arguments[0].click();", button)
+
+        try:
+            no_results = driver.find_element(By.CLASS_NAME, 'no-results-body')
+            if no_results:
+                print("NO BMI RESULTS")
+                return {}
+        except:
+            pass
 
         results = driver.find_elements(By.CLASS_NAME, 'view-details')
         soups = []

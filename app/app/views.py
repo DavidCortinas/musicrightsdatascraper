@@ -1,4 +1,5 @@
 import json
+import concurrent.futures
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.http import JsonResponse
@@ -19,15 +20,22 @@ def search_song(request):
 
     start_time = time()
 
-    try:
-        ascap_data = AscapScraper.get_results(song, performer)
-    except:
-        ascap_data = {}
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        # Submit the scraper functions to the executor
+        future1 = executor.submit(
+            AscapScraper.get_ascap_results, song, performer)
+        future2 = executor.submit(BmiScraper.get_bmi_results, song, performer)
 
-    try: 
-        bmi_data = BmiScraper.get_results(song, performer)    
-    except:
-        bmi_data = {}
+        # Retrieve the results from the futures
+        try:
+            ascap_data = future1.result()
+        except Exception as e:
+            ascap_data = {}
+
+        try:
+            bmi_data = future2.result()
+        except Exception as e:
+            bmi_data = {}
 
     if ascap_data == {} and bmi_data == {}:
         raise ValueError('No search results')
