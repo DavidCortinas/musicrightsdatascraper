@@ -14,7 +14,7 @@ from ..SongId import get_track_artist, get_track_title
 def get_ascap_results(song, performer):
     options = Options()
     options.add_argument("--incongnito")
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument('--verbose')
     options.add_argument(
         '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')
@@ -88,9 +88,16 @@ def get_ascap_results(song, performer):
             except:
                 pass
 
+        # handle alternate titles
+        results_url = driver.current_url
+        if 'at=false' in results_url:
+            modified_results_url = results_url.replace('at=false', 'at=true')
+            driver.get(modified_results_url)
+        else:
+            print("URL parameter 'at=false' not found.")
+
         try:
-            print('try')
-            no_results = WebDriverWait(driver, 12).until(
+            no_results = WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located(
                     (By.CLASS_NAME, 'c-empty-state'))
             )
@@ -99,17 +106,7 @@ def get_ascap_results(song, performer):
                 print("NO ASCAP RESULTS")
                 return {}
         except:
-            print('except')
             pass
-
-        # handle alternate titles
-        results_url = driver.current_url
-        if 'at=false' in results_url:
-            modified_results_url = results_url.replace('at=false', 'at=true')
-            print(modified_results_url)
-            driver.get(modified_results_url)
-        else:
-            print("URL parameter 'at=false' not found.")
 
         results = WebDriverWait(driver, 20).until(
             EC.presence_of_all_elements_located((By.TAG_NAME, 'article'))
@@ -180,7 +177,6 @@ def get_ascap_results(song, performer):
                 ['No phone number listed'])
             publishers_email_list.append(
                 emails) if emails else publishers_email_list.append(['No email listed'])
-            print(title)
 
             print(f'ASCAP Page Result: {r}')
             r += 1
@@ -196,7 +192,7 @@ def get_ascap_results(song, performer):
 
         # Click on the "Next" button
         next_button.click()
-    print("CREATE DATA")
+
     # Create df and export
     data = {
         'title': titles,
@@ -208,8 +204,6 @@ def get_ascap_results(song, performer):
         'publishers_email': publishers_email_list,
         # 'publishers_website': publishers_website_list,
     }
-    print("CREATE DATA FINISHED")
-    print(data)
 
     df = pd.DataFrame(data)
     # df.to_csv('ascap.csv', index=False)

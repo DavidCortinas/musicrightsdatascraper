@@ -138,7 +138,6 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
 };
 
 const mapStateToProps = state => {
-console.log(state)
   return {
     songData: state.song.songData,
     query: state.song.query || {},

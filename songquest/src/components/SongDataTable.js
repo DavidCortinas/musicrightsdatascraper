@@ -70,7 +70,6 @@ const Table = ({ songData }) => {
     ));
     };
 
-    console.log(ascapResults)
 
     const ascapDataRows = !isEmptyObject(ascapResults) ? ascapResults.title?.map((title, index) => ({
         song: title,
@@ -82,7 +81,6 @@ const Table = ({ songData }) => {
         email: formatResults(ascapResults.publishers_email[index]),
         source: "ASCAP",
     })) : [];
-    console.log(ascapDataRows)
 
     const bmiDataRows = !isEmptyObject(bmiResults) ? bmiResults.title?.map((title, index) => ({
         song: title,
@@ -94,7 +92,6 @@ const Table = ({ songData }) => {
         email: formatResults(bmiResults.publishers_email[index]),
         source: "BMI,"
     })) : [];
-    console.log(bmiDataRows)
 
     // const combinedDataRows = [...ascapDataRows, ...bmiDataRows];
 

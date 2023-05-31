@@ -27,16 +27,12 @@ export const song = (state = initialState, action) => {
       };
     }
     case SEARCH_SONG_FAILURE: {
-      console.log('SEARCH_SONG_FAILURE')
-      console.log(state)
-      console.log(payload)
       return {
         ...state,
         error: payload,
       };
     }
     case CLEAR_SEARCH_SONG_ERROR:
-      console.log('CLEAR_SEARCH_SONG_ERROR')
       return {
         ...state,
         error: null,
