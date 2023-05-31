@@ -14,7 +14,7 @@ from ..SongId import get_track_artist, get_track_title
 def get_ascap_results(song, performer):
     options = Options()
     options.add_argument("--incongnito")
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument('--verbose')
     options.add_argument(
         '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')
@@ -89,11 +89,17 @@ def get_ascap_results(song, performer):
                 pass
 
         try:
-            no_results = driver.find_element(By.CLASS_NAME, 'c-empty-state')
+            print('try')
+            no_results = WebDriverWait(driver, 12).until(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'c-empty-state'))
+            )
+            # no_results = driver.find_element(By.CLASS_NAME, 'c-empty-state')
             if no_results:
                 print("NO ASCAP RESULTS")
                 return {}
         except:
+            print('except')
             pass
 
         # handle alternate titles

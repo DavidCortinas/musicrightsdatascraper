@@ -70,8 +70,9 @@ const Table = ({ songData }) => {
     ));
     };
 
+    console.log(ascapResults)
 
-    const ascapDataRows = ascapResults?.title && ascapResults.title?.map((title, index) => ({
+    const ascapDataRows = !isEmptyObject(ascapResults) ? ascapResults.title?.map((title, index) => ({
         song: title,
         performer: formatResults(ascapResults.performers[index]),
         writers: formatResults(ascapResults.writers[index]),
@@ -80,10 +81,10 @@ const Table = ({ songData }) => {
         phoneNumber: formatResults(ascapResults.publishers_phone_number[index]),
         email: formatResults(ascapResults.publishers_email[index]),
         source: "ASCAP",
-    }));
+    })) : [];
     console.log(ascapDataRows)
 
-    const bmiDataRows = bmiResults?.title && bmiResults.title?.map((title, index) => ({
+    const bmiDataRows = !isEmptyObject(bmiResults) ? bmiResults.title?.map((title, index) => ({
         song: title,
         performer: formatResults(bmiResults.performers[index]),
         writers: formatResults(bmiResults.writers[index]),
@@ -92,7 +93,7 @@ const Table = ({ songData }) => {
         phoneNumber: formatResults(bmiResults.publishers_phone_number[index]),
         email: formatResults(bmiResults.publishers_email[index]),
         source: "BMI,"
-    }));
+    })) : [];
     console.log(bmiDataRows)
 
     // const combinedDataRows = [...ascapDataRows, ...bmiDataRows];
