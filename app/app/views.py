@@ -48,6 +48,8 @@ def search_song(request):
     end_time = time()
 
     elapsed_time = end_time - start_time
+    print(ascap_data)
+    print(bmi_data)
 
     print(f"Elapsed run time: {elapsed_time} seconds")
 

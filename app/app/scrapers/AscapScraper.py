@@ -8,13 +8,14 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from ..SongId import get_track_artist, get_track_title
 
 
 def get_ascap_results(song, performer):
     options = Options()
     options.add_argument("--incongnito")
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument('--verbose')
     options.add_argument(
         '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')
@@ -77,6 +78,7 @@ def get_ascap_results(song, performer):
     while True:
         print(f'ASCAP Page: {n}')
         n += 1
+
         if not performer:
             try:
                 # Scroll to the top of the page
@@ -94,6 +96,15 @@ def get_ascap_results(song, performer):
                 return {}
         except:
             pass
+
+        # handle alternate titles
+        results_url = driver.current_url
+        if 'at=false' in results_url:
+            modified_results_url = results_url.replace('at=false', 'at=true')
+            print(modified_results_url)
+            driver.get(modified_results_url)
+        else:
+            print("URL parameter 'at=false' not found.")
 
         results = WebDriverWait(driver, 20).until(
             EC.presence_of_all_elements_located((By.TAG_NAME, 'article'))

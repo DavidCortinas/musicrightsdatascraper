@@ -58,16 +58,11 @@ def get_bmi_results(song, performer):
     phone_numbers_list = []
     publishers_email_list = []
     # publishers_website_list = []
-    
+
     n = 1
     while True:
         print(f'BMI Page: {n}')
         n += 1
-
-        open_buttons = WebDriverWait(driver, 20).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, "opener-icon")))
-        for button in open_buttons:
-            driver.execute_script("arguments[0].click();", button)
 
         try:
             no_results = driver.find_element(By.CLASS_NAME, 'no-results-body')
@@ -76,6 +71,12 @@ def get_bmi_results(song, performer):
                 return {}
         except:
             pass
+
+        open_buttons = WebDriverWait(driver, 20).until(
+            EC.presence_of_all_elements_located((By.CLASS_NAME, "opener-icon")))
+        for button in open_buttons:
+            driver.execute_script("arguments[0].click();", button)
+
 
         results = driver.find_elements(By.CLASS_NAME, 'view-details')
         soups = []
