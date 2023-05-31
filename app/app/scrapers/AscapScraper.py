@@ -8,14 +8,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from ..SongId import get_track_artist, get_track_title
 
 
 def get_ascap_results(song, performer):
     options = Options()
     options.add_argument("--incongnito")
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument('--verbose')
     options.add_argument(
         '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')

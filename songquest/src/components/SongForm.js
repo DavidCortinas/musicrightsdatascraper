@@ -1,12 +1,9 @@
 import TextField from "@mui/material/TextField";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Box, Button, Card, CardHeader, CircularProgress, FormControl, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { makeStyles } from '@mui/styles';
-// import { searchSong } from "../actions";
 import { searchSongRequest } from '../thunks'
 import { searchSongSuccess } from "../actions";
 
@@ -62,18 +59,23 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
         console.log('Error: ', error);
         setIsLoading(false);
     }
-};
+  };
 
-const handleSongChange = (e) => {
-    setInvalidSearch(false)
-    setSongValue(e.target.value)
-}
-const handlePerformerChange = (e) => setPerformerValue(e.target.value)
-const handleReset = () => {
+    const handleSongChange = (e) => {
         setInvalidSearch(false)
-        setSongValue("");
-        setPerformerValue("")
+        setSongValue(e.target.value)
     }
+    const handlePerformerChange = (e) => setPerformerValue(e.target.value)
+    const handleReset = () => {
+            setInvalidSearch(false)
+            setSongValue("");
+            setPerformerValue("")
+        }
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault(); // Prevent form submission
+        onSubmit(); // Call the onSubmit function manually
+    };
 
   const classes = useStyles();
 
@@ -92,42 +94,44 @@ const handleReset = () => {
     ) : (
     <Grid container justifyContent="center">
         <Card className={classes.card}>
-            <FormControl>
-                <CardHeader 
-                    title="Song Search"
-                    subheader="Please include the name of the artist who performs the song for the quickest and most accurate search result..." 
-                    subheaderTypographyProps={{ width: "28rem" }}
-                />
-                <Box display='flex' justifyContent='center'>
-                    <TextField 
-                        InputLabelProps={{ shrink: true }} 
-                        autoFocus 
-                        variant="outlined" 
-                        error={invalidSearch} 
-                        required 
-                        className={classes.textField} 
-                        onChange={handleSongChange} 
-                        value={songValue} 
-                        label={invalidSearch ? "Error" : "Song"}
-                        helperText={invalidSearch ? 'Song title is required' : null}
-                     />
-                </Box>
-                <br />
-                <Box display='flex' justifyContent='center'>
-                    <TextField InputLabelProps={{ shrink: true }} variant="outlined" className={classes.textField} onChange={handlePerformerChange} value={performerValue} label="Performer" />
-                </Box>
-                <br />
-                <br />
-                <Grid>
-                    <Button className={classes.button} onClick={handleSubmit(onSubmit)}>Submit</Button>
-                    <Button 
-                        className={classes.button} 
-                        onClick={handleReset}>
-                        Reset
-                    </Button>
-                </Grid>
-                <br />
-            </FormControl>
+            <form onSubmit={handleFormSubmit}>
+                <FormControl>
+                    <CardHeader 
+                        title="Song Search"
+                        subheader="Please include the name of the artist who performs the song for the quickest and most accurate search result..." 
+                        subheaderTypographyProps={{ width: "28rem" }}
+                    />
+                    <Box display='flex' justifyContent='center'>
+                        <TextField 
+                            InputLabelProps={{ shrink: true }} 
+                            autoFocus 
+                            variant="outlined" 
+                            error={invalidSearch} 
+                            required 
+                            className={classes.textField} 
+                            onChange={handleSongChange} 
+                            value={songValue} 
+                            label={invalidSearch ? "Error" : "Song"}
+                            helperText={invalidSearch ? 'Song title is required' : null}
+                        />
+                    </Box>
+                    <br />
+                    <Box display='flex' justifyContent='center'>
+                        <TextField InputLabelProps={{ shrink: true }} variant="outlined" className={classes.textField} onChange={handlePerformerChange} value={performerValue} label="Performer" />
+                    </Box>
+                    <br />
+                    <br />
+                    <Grid>
+                        <Button type="submit" className={classes.button} onClick={handleSubmit(onSubmit)}>Submit</Button>
+                        <Button 
+                            className={classes.button} 
+                            onClick={handleReset}>
+                            Reset
+                        </Button>
+                    </Grid>
+                    <br />
+                </FormControl>
+            </form>
         </Card>
     </Grid>
   );
