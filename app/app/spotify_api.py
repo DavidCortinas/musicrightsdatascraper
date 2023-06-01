@@ -1,6 +1,7 @@
+import base64
 import requests
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 
 client_id = 'c1698c02315145779b659382642e0b4b'
 client_secret = '1586875dc3fc43e98e315d8f5b240ddc'
@@ -10,51 +11,114 @@ client_credentials_manager = SpotifyClientCredentials(
 
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+def get_access_token():
+    # Encode the client ID and client secret as base64
+    encoded_credentials = base64.b64encode(
+        f"{client_id}:{client_secret}".encode()).decode()
 
-def get_spotify_rights(song, performer):
-
-    song_query = song.replace("'", "%2527").replace(" ", "%2B")
-    performer_query = performer.replace("'", "%2527").replace(" ", "%2520")
-    # Replace with the actual URL
-    url = f'https://api.spotify.com/v1/search?q={song_query}%2520artist%3A{performer_query}&type=track'
-
+    # Set the headers and payload for the token request
     headers = {
-        'Authorization': 'Bearer BQDXg1pHYV8iL1EDLg_s6TVCa-idPMnv5_sON-EGaS-bAHjERJMg52xgvvQi-7xCcNfEwWY0cIm-nz9gVRPtybaqL7CBojAhaS6DuRzzto0xIAaqJSI'
+        "Authorization": f"Basic {encoded_credentials}",
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    payload = {
+        "grant_type": "client_credentials",
+        "client_id": client_id,
+        "client_secret": client_secret
     }
 
-    # Send a GET request with the authorization header
-    response = requests.get(url, headers=headers)
+    # Make the token request
+    response = requests.post(
+        "https://accounts.spotify.com/api/token", headers=headers, data=payload)
 
-    # Check the response status code
     if response.status_code == 200:
-        # Request was successful
-        data = response.json()  # Assuming the response contains JSON data
-        # Process the data as needed
-        print(data)
+        # Parse the response to retrieve the access token and expiration time
+        token_data = response.json()
+        access_token = token_data["access_token"]
+        expires_in = token_data["expires_in"]
+        return access_token, expires_in
     else:
-        # Request was not successful
-        print(f'Request failed with status code: {response.status_code}')
+        # Handle the error response
+        print(f"Error: {response.status_code} - {response.text}")
+        return None, None
 
-    if performer:
-        query = f'track:{song} artist:{performer}'
-    else:
-        query = song
+def get_spotify_rights(song, performer):
+    try:
+        try:
+            if performer:
+                query = f'track:{song} artist:{performer}'
+            else:
+                query = song
 
-    print(query)
+            results = sp.search(q=query, type='track', limit=1)
 
-    results = sp.search(q=query, type='track', limit=1)
-    print(results)
+            if len(results['tracks']['items']) > 0:
+                album_id = results['tracks']['items'][0]['album']['id']
 
-    if len(results['tracks']['items'][0]['album']['id']) > 0:
-        album_id = results['tracks']['items'][0]['album']['id']
+        except Exception as e:
+            print('Spotipy Album ID Error: ', e)
+
+        try:
+
+            # Get the initial access token
+            access_token, expires_in = get_access_token()
+
+            if access_token:
+                # Use the access token in your API requests
+                headers = {
+                    "Authorization": f"Bearer {access_token}",
+                }
+                # Make your API request with the headers
+
+                # Check if the access token has expired
+                if expires_in <= 0:
+                    # Access token has expired, get a new one
+                    access_token, expires_in = get_access_token()
+                    if access_token:
+                        # Update the headers with the new access token
+                        headers["Authorization"] = f"Bearer {access_token}"
+                        # Make your API request with the updated headers
+            else:
+                # Handle the error case
+                print("Failed to obtain access token.")
+                
+            song_query = song.replace("'", "%2527").replace(" ", "%2B")
+            performer_query = performer.replace("'", "%2527").replace(" ", "%2520")
+
+            url = f'https://api.spotify.com/v1/search?q={song_query}%2520artist%3A{performer_query}&type=track'
+
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+
+                tracks = data['tracks']['items']
+
+                target_track = None
+                for track in tracks:
+                    if (
+                        track['name'].lower() == song.lower() and track['artists'][0]['name'].lower() == performer.lower()
+                    ):
+                        target_track = track
+                        break
+
+                if target_track:
+                    album_id = target_track['album']['id']
+                else:
+                    print('Track not found')
+
+            else:
+                print(f'Request failed with status code: {response.status_code}')
+        except Exception as e:
+            print('Spotify API Album ID Error: ', e)
+
+    except Exception as e:
+        print('Spotify Get Album ID Error: ', e)
 
     album = sp.album(album_id=album_id)
-    print(album)
 
     copyrights = album['copyrights']
     label = album['label']
-    print(copyrights)
-    print(label)
 
     copyrights_list = []
     for copyright in copyrights:
@@ -64,6 +128,5 @@ def get_spotify_rights(song, performer):
         'copyrights': [copyrights_list],
         'label': [[label]]
     }
-    print(data)
 
     return data

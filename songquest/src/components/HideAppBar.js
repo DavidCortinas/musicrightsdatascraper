@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SongForm from './SongForm';
+import { useNavigate } from 'react-router-dom'
 import { AppBar, CardHeader, CssBaseline, FormControlLabel, FormGroup, Grid, IconButton, Slide, Switch, Toolbar, Typography, createTheme, styled, ThemeProvider, useScrollTrigger, Button } from '@mui/material';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -43,6 +43,8 @@ export const HideAppBar = ()=> {
     },
   });
 
+  const navigate = useNavigate();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -57,11 +59,11 @@ export const HideAppBar = ()=> {
               onClick={handleMenu}
               sx={{ mr: 2 }}
             > */}
-              {/* <Button> */}
+              <Button onClick={() => navigate('/')}>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
                   SongQuest
                 </Typography>
-              {/* </Button> */}
+              </Button>
               <div>
                 {/* <Menu
                   id="menu-appbar"

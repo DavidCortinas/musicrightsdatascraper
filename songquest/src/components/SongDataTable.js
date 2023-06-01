@@ -78,6 +78,9 @@ const Table = ({ songData }) => {
     ));
     };
 
+    console.log(ascapResults)
+    console.log(bmiResults)
+
 
     const ascapDataRows = !isEmptyObject(ascapResults) ? ascapResults.title?.map((title, index) => ({
         song: title,
@@ -87,8 +90,8 @@ const Table = ({ songData }) => {
         address: formatResults(ascapResults.publishers_address[index]),
         phoneNumber: formatResults(ascapResults.publishers_phone_number[index]),
         email: formatResults(ascapResults.publishers_email[index]),
-        copyrights: formatResults(ascapResults.copyrights[index]),
-        label: formatResults(ascapResults.label[index]),
+        copyrights: ascapResults.copyrights && formatResults(ascapResults.copyrights[index]),
+        label: ascapResults.label && formatResults(ascapResults.label[index]),
         source: "ASCAP",
     })) : [];
 
@@ -100,10 +103,12 @@ const Table = ({ songData }) => {
         address: formatResults(bmiResults.publishers_address[index]),
         phoneNumber: formatResults(bmiResults.publishers_phone_number[index]),
         email: formatResults(bmiResults.publishers_email[index]),
-        copyrights: formatResults(bmiResults.copyrights[index]),
-        label: formatResults(bmiResults.label[index]),
+        copyrights: bmiResults.copyrights && formatResults(bmiResults.copyrights[index]),
+        label: bmiResults.label && formatResults(bmiResults.label[index]),
         source: "BMI,"
     })) : [];
+
+    console.log(bmiDataRows)
 
     // const combinedDataRows = [...ascapDataRows, ...bmiDataRows];
 

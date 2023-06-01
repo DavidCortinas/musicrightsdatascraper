@@ -52,25 +52,25 @@ def search_song(request):
 
         print('spotify_data: ', spotify_data)
 
-    ascap_data.update(spotify_data)
+    ascap_data.update(spotify_data) if ascap_data != {} else None
 
-    bmi_data.update(spotify_data)
+    bmi_data.update(spotify_data) if bmi_data != {} else None
 
-    combined_data = {}
+    # combined_data = {}
 
-    # Merge the performers, writers, publishers, etc. as before
-    for key in ascap_data.keys():
-        if key != 'title':
-            combined_data[key] = list(
-                set(ascap_data[key][0]).union(bmi_data[key][0]))
+    # # Merge the performers, writers, publishers, etc. as before
+    # for key in ascap_data.keys():
+    #     if key != 'title':
+    #         combined_data[key] = list(
+    #             set(ascap_data[key][0]).union(bmi_data[key][0]))
 
-    # Merge the titles separately
-    combined_data['title'] = list(
-        set(ascap_data['title']).union(bmi_data['title']))
+    # # Merge the titles separately
+    # combined_data['title'] = list(
+    #     set(ascap_data['title']).union(bmi_data['title']))
 
-    combined_data.update(spotify_data)
+    # combined_data.update(spotify_data)
 
-    print('combined_data: ', combined_data)
+    # print('combined_data: ', combined_data)
     print('ascap_data: ', ascap_data)
     print('bmi_data: ', bmi_data)
 
