@@ -44,6 +44,7 @@ def search_song(request):
             bmi_data = {}
 
         try:
+            print("try spotify")
             spotify_data = spotify_executor.result()
         except Exception as e:
             print('Spotify Error: ', e)
