@@ -4,7 +4,8 @@ from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.http import JsonResponse
 from time import time
-from .scrapers import AscapScraper, BmiScraper
+from . import spotify_api
+from .scrapers import ascap_scraper, bmi_scraper
 
 
 @ensure_csrf_cookie
@@ -22,20 +23,55 @@ def search_song(request):
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Submit the scraper functions to the executor
-        future1 = executor.submit(
-            AscapScraper.get_ascap_results, song, performer)
-        future2 = executor.submit(BmiScraper.get_bmi_results, song, performer)
+        ascap_executor = executor.submit(
+            ascap_scraper.get_ascap_results, song, performer)
+        bmi_executor = executor.submit(
+            bmi_scraper.get_bmi_results, song, performer)
+        spotify_executor = executor.submit(
+            spotify_api.get_spotify_rights, song, performer)
 
         # Retrieve the results from the futures
         try:
-            ascap_data = future1.result()
+            ascap_data = ascap_executor.result()
         except Exception as e:
+            print('ASCAP Error: ', e)
             ascap_data = {}
 
         try:
-            bmi_data = future2.result()
+            bmi_data = bmi_executor.result()
         except Exception as e:
+            print('BMI Error: ', e)
             bmi_data = {}
+
+        try:
+            spotify_data = spotify_executor.result()
+        except Exception as e:
+            print('Spotify Error: ', e)
+            spotify_data = {}
+
+        print('spotify_data: ', spotify_data)
+
+    ascap_data.update(spotify_data)
+
+    bmi_data.update(spotify_data)
+
+    combined_data = {}
+
+    # Merge the performers, writers, publishers, etc. as before
+    for key in ascap_data.keys():
+        if key != 'title':
+            combined_data[key] = list(
+                set(ascap_data[key][0]).union(bmi_data[key][0]))
+
+    # Merge the titles separately
+    combined_data['title'] = list(
+        set(ascap_data['title']).union(bmi_data['title']))
+
+    combined_data.update(spotify_data)
+
+    print('combined_data: ', combined_data)
+    print('ascap_data: ', ascap_data)
+    print('bmi_data: ', bmi_data)
 
     if ascap_data == {} and bmi_data == {}:
         raise ValueError('No search results')
@@ -48,8 +84,6 @@ def search_song(request):
     end_time = time()
 
     elapsed_time = end_time - start_time
-    print(ascap_data)
-    print(bmi_data)
 
     print(f"Elapsed run time: {elapsed_time} seconds")
 

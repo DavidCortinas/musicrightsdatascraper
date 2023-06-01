@@ -77,7 +77,6 @@ def get_bmi_results(song, performer):
         for button in open_buttons:
             driver.execute_script("arguments[0].click();", button)
 
-
         results = driver.find_elements(By.CLASS_NAME, 'view-details')
         soups = []
 
@@ -126,7 +125,7 @@ def get_bmi_results(song, performer):
 
                 phone_number_link = section.select_one('a[href^="tel:"]')
                 phone_number = phone_number_link.get_text(
-                    strip=True) if phone_number_link else 'No phone number listed'
+                    strip=True).replace(' ', '') if phone_number_link else 'No phone number listed'
                 phone_numbers.append(phone_number)
 
                 email_link = section.select_one('a[href^="mailto:"]')

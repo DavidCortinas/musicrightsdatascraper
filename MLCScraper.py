@@ -10,7 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from app.app.SongId import get_track_title
+from app.app.song_id import get_track_title
 
 options = Options()
 options.add_argument("--incongnito")

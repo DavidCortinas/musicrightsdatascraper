@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from ..SongId import get_track_artist, get_track_title
+from ..song_id import get_track_artist, get_track_title
 
 
 def get_ascap_results(song, performer):

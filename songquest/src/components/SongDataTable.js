@@ -31,16 +31,24 @@ const Table = ({ songData }) => {
       },
       {
         accessorKey: 'address',
-        header: 'Address',
+        header: 'Publisher Address',
       },
       {
         accessorKey: 'phoneNumber',
-        header: 'Phone Number',
+        header: 'Publisher Phone Number',
       },
       {
         accessorKey: 'email',
-        header: 'Email',
+        header: 'Publisher Email',
       },
+      {
+        accessorKey: 'copyrights',
+        header: 'Copyrights',
+      },
+      {
+        accessorKey: 'label',
+        header: 'Label',
+      }
     ],
     []
   );
@@ -79,6 +87,8 @@ const Table = ({ songData }) => {
         address: formatResults(ascapResults.publishers_address[index]),
         phoneNumber: formatResults(ascapResults.publishers_phone_number[index]),
         email: formatResults(ascapResults.publishers_email[index]),
+        copyrights: formatResults(ascapResults.copyrights[index]),
+        label: formatResults(ascapResults.label[index]),
         source: "ASCAP",
     })) : [];
 
@@ -90,6 +100,8 @@ const Table = ({ songData }) => {
         address: formatResults(bmiResults.publishers_address[index]),
         phoneNumber: formatResults(bmiResults.publishers_phone_number[index]),
         email: formatResults(bmiResults.publishers_email[index]),
+        copyrights: formatResults(bmiResults.copyrights[index]),
+        label: formatResults(bmiResults.label[index]),
         source: "BMI,"
     })) : [];
 
