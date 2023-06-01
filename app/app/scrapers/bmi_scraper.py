@@ -9,9 +9,11 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from time import time
 
 
 def get_bmi_results(song, performer):
+    start_time = time()
     # Find results
     options = Options()
     options.add_argument("--incognito")
@@ -174,5 +176,11 @@ def get_bmi_results(song, performer):
     # df.to_csv('bmi.csv', index=False)
 
     driver.quit()
+
+    end_time = time()
+
+    elapsed_time = end_time - start_time
+
+    print(f"BMI elapsed run time: {elapsed_time} seconds")
 
     return data

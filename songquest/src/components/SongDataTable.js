@@ -66,49 +66,44 @@ const Table = ({ songData }) => {
     };
     
 
-    const formatResults = (arr) => {
-    const flattenedArray = arr.flat();
-    const lastIndex = flattenedArray.length - 1;
+    const formatPublishingResults = (arr) => {
+      const flattenedArray = arr.flat();
+      const lastIndex = flattenedArray.length - 1;
 
-    return flattenedArray.map((item, index) => (
-        <div>
-        {item}
-        {index !== lastIndex && <>,<br /></>}
-        </div>
-    ));
+      return flattenedArray.map((item, index) => (
+          <div>
+          {item}
+          {index !== lastIndex && <>,<br /></>}
+          </div>
+      ));
     };
-
-    console.log(ascapResults)
-    console.log(bmiResults)
 
 
     const ascapDataRows = !isEmptyObject(ascapResults) ? ascapResults.title?.map((title, index) => ({
         song: title,
-        performer: formatResults(ascapResults.performers[index]),
-        writers: formatResults(ascapResults.writers[index]),
-        publisher: formatResults(ascapResults.publishers[index]),
-        address: formatResults(ascapResults.publishers_address[index]),
-        phoneNumber: formatResults(ascapResults.publishers_phone_number[index]),
-        email: formatResults(ascapResults.publishers_email[index]),
-        copyrights: ascapResults.copyrights && formatResults(ascapResults.copyrights[index]),
-        label: ascapResults.label && formatResults(ascapResults.label[index]),
+        performer: formatPublishingResults(ascapResults.performers[index]),
+        writers: formatPublishingResults(ascapResults.writers[index]),
+        publisher: formatPublishingResults(ascapResults.publishers[index]),
+        address: formatPublishingResults(ascapResults.publishers_address[index]),
+        phoneNumber: formatPublishingResults(ascapResults.publishers_phone_number[index]),
+        email: formatPublishingResults(ascapResults.publishers_email[index]),
+        copyrights: ascapResults.copyrights && ascapResults.copyrights.flat(),
+        label: ascapResults.label && ascapResults.label.flat(),
         source: "ASCAP",
     })) : [];
 
     const bmiDataRows = !isEmptyObject(bmiResults) ? bmiResults.title?.map((title, index) => ({
         song: title,
-        performer: formatResults(bmiResults.performers[index]),
-        writers: formatResults(bmiResults.writers[index]),
-        publisher: formatResults(bmiResults.publishers[index]),
-        address: formatResults(bmiResults.publishers_address[index]),
-        phoneNumber: formatResults(bmiResults.publishers_phone_number[index]),
-        email: formatResults(bmiResults.publishers_email[index]),
-        copyrights: bmiResults.copyrights && formatResults(bmiResults.copyrights[index]),
-        label: bmiResults.label && formatResults(bmiResults.label[index]),
+        performer: formatPublishingResults(bmiResults.performers[index]),
+        writers: formatPublishingResults(bmiResults.writers[index]),
+        publisher: formatPublishingResults(bmiResults.publishers[index]),
+        address: formatPublishingResults(bmiResults.publishers_address[index]),
+        phoneNumber: formatPublishingResults(bmiResults.publishers_phone_number[index]),
+        email: formatPublishingResults(bmiResults.publishers_email[index]),
+        copyrights: bmiResults.copyrights && bmiResults.copyrights.flat(),
+        label: bmiResults.label && bmiResults.label.flat(),
         source: "BMI,"
     })) : [];
-
-    console.log(bmiDataRows)
 
     // const combinedDataRows = [...ascapDataRows, ...bmiDataRows];
 

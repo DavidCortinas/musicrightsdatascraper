@@ -2,6 +2,7 @@ import base64
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
+from time import time
 
 client_id = 'c1698c02315145779b659382642e0b4b'
 client_secret = '1586875dc3fc43e98e315d8f5b240ddc'
@@ -10,6 +11,8 @@ client_credentials_manager = SpotifyClientCredentials(
     client_id=client_id, client_secret=client_secret)
 
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+start_time = time()
 
 def get_access_token():
     # Encode the client ID and client secret as base64
@@ -128,5 +131,11 @@ def get_spotify_rights(song, performer):
         'copyrights': [copyrights_list],
         'label': [[label]]
     }
+
+    end_time = time()
+
+    elapsed_time = end_time - start_time
+
+    print(f"Spotify elapsed run time: {elapsed_time} seconds")
 
     return data

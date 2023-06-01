@@ -8,10 +8,12 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from time import time
 from ..song_id import get_track_artist, get_track_title
 
 
 def get_ascap_results(song, performer):
+    start_time = time()
     options = Options()
     options.add_argument("--incongnito")
     options.add_argument("--headless")
@@ -210,5 +212,11 @@ def get_ascap_results(song, performer):
 
     # driver.implicitly_wait(1000)
     driver.quit()
+
+    end_time = time()
+
+    elapsed_time = end_time - start_time
+
+    print(f"ASCAP elapsed run time: {elapsed_time} seconds")
 
     return data

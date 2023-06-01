@@ -50,8 +50,6 @@ def search_song(request):
             print('Spotify Error: ', e)
             spotify_data = {}
 
-        print('spotify_data: ', spotify_data)
-
     ascap_data.update(spotify_data) if ascap_data != {} else None
 
     bmi_data.update(spotify_data) if bmi_data != {} else None
@@ -71,8 +69,6 @@ def search_song(request):
     # combined_data.update(spotify_data)
 
     # print('combined_data: ', combined_data)
-    print('ascap_data: ', ascap_data)
-    print('bmi_data: ', bmi_data)
 
     if ascap_data == {} and bmi_data == {}:
         raise ValueError('No search results')
@@ -86,7 +82,7 @@ def search_song(request):
 
     elapsed_time = end_time - start_time
 
-    print(f"Elapsed run time: {elapsed_time} seconds")
+    print(f"Total elapsed run time: {elapsed_time} seconds")
 
     return JsonResponse(
         response_data,
