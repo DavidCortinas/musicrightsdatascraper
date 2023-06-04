@@ -1,11 +1,11 @@
 import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { Box, Button, Card, CardHeader, CircularProgress, FormControl, Grid } from "@mui/material";
+import { connect, useDispatch } from "react-redux";
+import { Alert, Box, Button, Card, CardHeader, CircularProgress, FormControl, Grid, Snackbar, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { makeStyles } from '@mui/styles';
 import { searchSongRequest } from '../thunks'
-import { searchSongSuccess } from "../actions";
+import { clearSearchSongError, searchSongSuccess } from "../actions";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -17,10 +17,19 @@ const useStyles = makeStyles(theme => ({
     }, 
     subHeader: {
         width: "25rem"
+    },
+    description: {
+        maxWidth: '65rem',
+        color: "#6f6f71"
+    },
+    descriptionBox: {
+        display: 'flex',
+        justifyContent: 'center',
+        paddingBottom: '1rem',
     }
 }))
 
-export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
+export const SongForm = ({ error, onSearchPressed, onDataLoaded, query }) => {
   const { handleSubmit } = useForm();
   const [songValue, setSongValue] = useState('');
   const [performerValue, setPerformerValue] = useState('');
@@ -32,12 +41,11 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
 
   const [invalidSearch, setInvalidSearch] = useState(false);
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
+  const dispatch = useDispatch()
+
+const handleSnackbarClose = () => {
+    dispatch(clearSearchSongError());
+}
 
   const onSubmit = async () => {
     if (songValue === '') {
@@ -92,48 +100,74 @@ export const SongForm = ({ onSearchPressed, onDataLoaded, query }) => {
         </Box>
     </>
     ) : (
-    <Grid container justifyContent="center">
-        <Card className={classes.card}>
-            <form onSubmit={handleFormSubmit}>
-                <FormControl>
-                    <CardHeader 
-                        title="Song Search"
-                        subheader="Please include the name of the artist who performs the song for the quickest and most accurate search result..." 
-                        subheaderTypographyProps={{ width: "28rem" }}
-                    />
-                    <Box display='flex' justifyContent='center'>
-                        <TextField 
-                            InputLabelProps={{ shrink: true }} 
-                            autoFocus 
-                            variant="outlined" 
-                            error={invalidSearch} 
-                            required 
-                            className={classes.textField} 
-                            onChange={handleSongChange} 
-                            value={songValue} 
-                            label={invalidSearch ? "Error" : "Song"}
-                            helperText={invalidSearch ? 'Song title is required' : null}
+        <>
+        <Box className={classes.descriptionBox}>
+            <Typography className={classes.description} variant="h6">
+                Interested in licensing a song but don't know where to start? 
+                Let SongQuest find the rights holders for you so you can focus on making the deal.
+                Search for the song that you want to license below.
+            </Typography>
+        </Box>
+        <Grid container justifyContent="center">
+            <Card className={classes.card}>
+                <form onSubmit={handleFormSubmit}>
+                    <FormControl>
+                        <CardHeader 
+                            title="Song Search"
+                            subheader="Please include the name of the artist who performs the song for the quickest and most accurate search result..." 
+                            subheaderTypographyProps={{ width: "28rem" }}
                         />
-                    </Box>
-                    <br />
-                    <Box display='flex' justifyContent='center'>
-                        <TextField InputLabelProps={{ shrink: true }} variant="outlined" className={classes.textField} onChange={handlePerformerChange} value={performerValue} label="Performer" />
-                    </Box>
-                    <br />
-                    <br />
-                    <Grid>
-                        <Button type="submit" className={classes.button} onClick={handleSubmit(onSubmit)}>Submit</Button>
-                        <Button 
-                            className={classes.button} 
-                            onClick={handleReset}>
-                            Reset
-                        </Button>
-                    </Grid>
-                    <br />
-                </FormControl>
-            </form>
-        </Card>
-    </Grid>
+                        <Box display='flex' justifyContent='center'>
+                            <TextField 
+                                InputLabelProps={{ shrink: true }} 
+                                autoFocus 
+                                variant="outlined" 
+                                error={invalidSearch} 
+                                required 
+                                className={classes.textField} 
+                                onChange={handleSongChange} 
+                                value={songValue} 
+                                label={invalidSearch ? "Error" : "Song"}
+                                helperText={invalidSearch ? 'Song title is required' : null}
+                            />
+                        </Box>
+                        <br />
+                        <Box display='flex' justifyContent='center'>
+                            <TextField InputLabelProps={{ shrink: true }} variant="outlined" className={classes.textField} onChange={handlePerformerChange} value={performerValue} label="Performer" />
+                        </Box>
+                        <br />
+                        <br />
+                        <Grid>
+                            <Button type="submit" className={classes.button} onClick={handleSubmit(onSubmit)}>Submit</Button>
+                            <Button 
+                                className={classes.button} 
+                                onClick={handleReset}>
+                                Reset
+                            </Button>
+                        </Grid>
+                        <br />
+                    </FormControl>
+                </form>
+            </Card>
+        </Grid>
+            {/* Snackbar for displaying errors */}
+            <Snackbar 
+                open={!!error} 
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+            >
+                <Alert 
+                    onClose={handleSnackbarClose} 
+                    severity="error" 
+                    elevation={6} 
+                    variant="filled"
+                >
+                    <Typography>
+                        {"There were no results returned for your search, please make sure the song's spelling is correct and enter the performer for more accurate search results"}
+                    </Typography>
+                </Alert>
+            </Snackbar> 
+        </>
   );
 };
 
@@ -141,6 +175,7 @@ const mapStateToProps = state => {
   return {
     songData: state.song.songData,
     query: state.song.query || {},
+    error: state.song.error,
   };
 };
 

@@ -1,4 +1,4 @@
-import { CLEAR_SEARCH_SONG_ERROR, SEARCH_SONG, SEARCH_SONG_FAILURE, SEARCH_SONG_SUCCESS } from "./actions";
+import { CLEAR_SEARCH_SONG_ERROR, RESET_DATA_LOADED, SEARCH_SONG, SEARCH_SONG_FAILURE, SEARCH_SONG_SUCCESS } from "./actions";
 
 const initialState = {
   query: {song: '', performer: ''},
@@ -22,7 +22,7 @@ export const song = (state = initialState, action) => {
       return {
         ...state,
         songData: payload.songData,
-        query: payload.query, // Update the query in the state
+        query: payload.query,
         dataLoaded: true,
       };
     }
@@ -36,6 +36,12 @@ export const song = (state = initialState, action) => {
       return {
         ...state,
         error: null,
+    }
+    case RESET_DATA_LOADED:
+      console.log(state)
+      return {
+        ...state,
+        dataLoaded: false,
     }
     default: 
       return {

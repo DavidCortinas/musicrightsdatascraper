@@ -22,9 +22,19 @@ def search_song(request):
     start_time = time()
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        # Submit the scraper functions to the executor
-        ascap_executor = executor.submit(
-            ascap_scraper.get_ascap_results, song, performer)
+        # Initialize variables to hold the results
+        ascap_data = {}
+        bmi_data = {}
+        spotify_data = {}
+
+        try:
+            # Submit the ASCAP scraper function to the executor
+            ascap_executor = executor.submit(
+                ascap_scraper.get_ascap_results, song, performer)
+            ascap_data = ascap_executor.result()
+        except Exception as e:
+            print('ASCAP Error:', e)
+
         bmi_executor = executor.submit(
             bmi_scraper.get_bmi_results, song, performer)
         spotify_executor = executor.submit(
@@ -32,26 +42,17 @@ def search_song(request):
 
         # Retrieve the results from the futures
         try:
-            ascap_data = ascap_executor.result()
-        except Exception as e:
-            print('ASCAP Error: ', e)
-            ascap_data = {}
-
-        try:
             bmi_data = bmi_executor.result()
         except Exception as e:
             print('BMI Error: ', e)
-            bmi_data = {}
 
         try:
             print("try spotify")
             spotify_data = spotify_executor.result()
         except Exception as e:
             print('Spotify Error: ', e)
-            spotify_data = {}
 
     ascap_data.update(spotify_data) if ascap_data != {} else None
-
     bmi_data.update(spotify_data) if bmi_data != {} else None
 
     # combined_data = {}

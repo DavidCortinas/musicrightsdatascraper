@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import AppContainer from "./AppContainer";
+import RoutesContainer from "./RoutesContainer";
 import './App.css'
 import getCSRFToken from "./csrf";
+import NavBar from "./components/NavBar";
+import { Container } from "@mui/material";
 
 function App() {
   const [csrfToken, setCsrfToken] = useState(null);
@@ -23,7 +25,11 @@ function App() {
 
   return (
     <div className="App">
-      <AppContainer />
+      <NavBar />
+      <br />
+      <Container maxWidth='xl'>
+        <RoutesContainer />
+      </Container>
     </div>
   );
 }
