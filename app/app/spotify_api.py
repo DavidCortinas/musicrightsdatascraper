@@ -46,6 +46,7 @@ def get_access_token():
         return None, None
 
 def get_spotify_rights(song, performer):
+    start_time = time()
     try:
         try:
             if performer:

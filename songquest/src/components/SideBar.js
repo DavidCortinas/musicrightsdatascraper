@@ -1,21 +1,18 @@
-import { makeStyles } from '@mui/styles';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import SavedSearchIcon from '@mui/icons-material/SavedSearch';
+import WorkIcon from '@mui/icons-material/Work';
 import { resetDataLoaded } from '../actions';
 
-const useStyles = makeStyles((theme) => ({
-    sidebar: {
-        height: '100%',
-        // display: 'flex',
-    },
-}))
-
 export const SideBar = ({ resetDataLoaded }) => {
-    const classes = useStyles();
+    const viewHeight = window.outerHeight;
     const location = useLocation();
     const navigate = useNavigate();
+    const [collapse, setCollapse] = useState(false);
 
     useEffect(() => {
         if (location.pathname !== '/') {
@@ -23,22 +20,38 @@ export const SideBar = ({ resetDataLoaded }) => {
         }
     }, [location.pathname, navigate]);
 
-    const handleNavigation = (path) => {
+    const handleHomeNavigation = (path) => {
         resetDataLoaded();
         navigate(path);
     };
 
+    const handleCollapse = () => {
+        collapse == false
+        ? setCollapse(true)
+        : setCollapse(false);
+    };
+
     return (
-        <Sidebar className={classes.sidebar} >
+        <Sidebar style={{ height: viewHeight }} collapsed={collapse}>
             <Menu>
                 {/* <SubMenu label="Charts">
                 <MenuItem> Pie charts </MenuItem>
                 <MenuItem> Line charts </MenuItem>
                 </SubMenu> */}
-                <MenuItem> Collapse </MenuItem>
-                <MenuItem onClick={() => handleNavigation('/')}> Home </MenuItem>
-                <MenuItem> Saved Searches </MenuItem>
-                <MenuItem> Licensing Projects </MenuItem>
+                <MenuItem
+                  onClick={() => handleCollapse()}
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                    <MenuOpenIcon 
+                      style={{
+                      transform: collapse ? 'scaleX(-1)' : 'scaleX(1)',
+                      transition: 'transform 0.3s ease',
+                      }}
+                    />
+                </MenuItem>
+                <MenuItem onClick={() => handleHomeNavigation('/')}>{collapse ? <HomeIcon /> : 'Home'}</MenuItem>
+                <MenuItem disabled>{collapse ? <SavedSearchIcon /> : 'Saved Searches'}</MenuItem>
+                <MenuItem disabled>{collapse ? <WorkIcon /> : 'Licensing Projects'}</MenuItem>
             </Menu>
         </Sidebar>
     )
