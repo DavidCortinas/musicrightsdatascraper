@@ -31,7 +31,7 @@ function App() {
         <Grid item xs={2}>
           <SideBar />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={10} position={"center"}>
           <Container maxWidth='xl'>
             <RoutesContainer />
           </Container>

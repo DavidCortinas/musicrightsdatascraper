@@ -29,49 +29,33 @@ def search_song(request):
 
         try:
             # Submit the ASCAP scraper function to the executor
-            ascap_executor = executor.submit(
+            ascap_future = executor.submit(
                 ascap_scraper.get_ascap_results, song, performer)
-            ascap_data = ascap_executor.result()
         except Exception as e:
             print('ASCAP Error:', e)
 
-        bmi_executor = executor.submit(
+        bmi_future = executor.submit(
             bmi_scraper.get_bmi_results, song, performer)
-        spotify_executor = executor.submit(
+        spotify_future = executor.submit(
             spotify_api.get_spotify_rights, song, performer)
 
-        # Retrieve the results from the futures
-        try:
-            bmi_data = bmi_executor.result()
-        except Exception as e:
-            print('BMI Error: ', e)
+        # Wait for the futures to complete and retrieve the results
+        futures = [ascap_future, bmi_future, spotify_future]
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                if future == ascap_future:
+                    ascap_data = future.result()
+                elif future == bmi_future:
+                    bmi_data = future.result()
+                elif future == spotify_future:
+                    spotify_data = future.result()
+            except Exception as e:
+                print('Error:', e)
 
-        try:
-            print("try spotify")
-            spotify_data = spotify_executor.result()
-        except Exception as e:
-            print('Spotify Error: ', e)
+    ascap_data.update(spotify_data) if ascap_data else None
+    bmi_data.update(spotify_data) if bmi_data else None
 
-    ascap_data.update(spotify_data) if ascap_data != {} else None
-    bmi_data.update(spotify_data) if bmi_data != {} else None
-
-    # combined_data = {}
-
-    # # Merge the performers, writers, publishers, etc. as before
-    # for key in ascap_data.keys():
-    #     if key != 'title':
-    #         combined_data[key] = list(
-    #             set(ascap_data[key][0]).union(bmi_data[key][0]))
-
-    # # Merge the titles separately
-    # combined_data['title'] = list(
-    #     set(ascap_data['title']).union(bmi_data['title']))
-
-    # combined_data.update(spotify_data)
-
-    # print('combined_data: ', combined_data)
-
-    if ascap_data == {} and bmi_data == {}:
+    if not ascap_data and not bmi_data:
         raise ValueError('No search results')
 
     response_data = {
@@ -80,9 +64,7 @@ def search_song(request):
     }
 
     end_time = time()
-
     elapsed_time = end_time - start_time
-
     print(f"Total elapsed run time: {elapsed_time} seconds")
 
     return JsonResponse(

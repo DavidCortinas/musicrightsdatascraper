@@ -210,7 +210,6 @@ def get_ascap_results(song, performer):
     df = pd.DataFrame(data)
     # df.to_csv('ascap.csv', index=False)
 
-    # driver.implicitly_wait(1000)
     driver.quit()
 
     end_time = time()
