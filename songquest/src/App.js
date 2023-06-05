@@ -3,7 +3,8 @@ import RoutesContainer from "./RoutesContainer";
 import './App.css'
 import getCSRFToken from "./csrf";
 import NavBar from "./components/NavBar";
-import { Container } from "@mui/material";
+import { Container, Grid } from "@mui/material";
+import SideBar from "./components/SideBar";
 
 function App() {
   const [csrfToken, setCsrfToken] = useState(null);
@@ -26,10 +27,16 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <br />
-      <Container maxWidth='xl'>
-        <RoutesContainer />
-      </Container>
+      <Grid container>
+        <Grid item xs={2}>
+          <SideBar />
+        </Grid>
+        <Grid item xs={10}>
+          <Container maxWidth='xl'>
+            <RoutesContainer />
+          </Container>
+        </Grid>
+      </Grid>
     </div>
   );
 }

@@ -48,7 +48,6 @@ const RoutesContainer = ({ query, dataLoaded, error, onSearchPressed }) => {
             element={<SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} />} 
           />
           <Route 
-            exact
             path={"/song-data"} 
             element={
               <SongDataTable 

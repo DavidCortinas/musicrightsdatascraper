@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#fafafa',
   color: theme.palette.mode === 'dark' ? theme.palette.text.primary : "#6573c3",
+  boxShadow: 'none'
 }));
 
 const StyledToolbar = styled(Toolbar)({

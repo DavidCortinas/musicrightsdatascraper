@@ -20,7 +20,8 @@ const useStyles = makeStyles(theme => ({
     },
     description: {
         maxWidth: '65rem',
-        color: "#6f6f71"
+        color: "#6f6f71",
+        paddingTop: "1rem"
     },
     descriptionBox: {
         display: 'flex',

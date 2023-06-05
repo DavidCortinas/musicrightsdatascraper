@@ -38,7 +38,6 @@ export const song = (state = initialState, action) => {
         error: null,
     }
     case RESET_DATA_LOADED:
-      console.log(state)
       return {
         ...state,
         dataLoaded: false,
