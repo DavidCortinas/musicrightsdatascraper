@@ -4,15 +4,15 @@ import { AppBar, CardHeader, CssBaseline, FormControlLabel, FormGroup, Grid, Ico
 import { resetDataLoaded } from '../actions';
 import { connect } from 'react-redux';
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#fafafa',
-  color: theme.palette.mode === 'dark' ? theme.palette.text.primary : "#6573c3",
-  boxShadow: 'none'
-}));
+// const StyledAppBar = styled(AppBar)(({ theme }) => ({
+//   backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#fafafa',
+//   color: theme.palette.mode === 'dark' ? theme.palette.text.primary : "#6573c3",
+//   boxShadow: 'none'
+// }));
 
-const StyledToolbar = styled(Toolbar)({
-  justifyContent: 'space-between',
-})
+// const StyledToolbar = styled(Toolbar)({
+//   justifyContent: 'space-between',
+// })
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -39,15 +39,15 @@ export const NavBar = ({ resetDataLoaded }) => {
     setAnchorEl(null);
   };
 
-  const changeTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-  };
+  // const changeTheme = () => {
+  //   setIsDarkTheme(!isDarkTheme);
+  // };
 
-  const theme = createTheme({
-    palette: {
-      mode: isDarkTheme ? 'dark' : 'light',
-    },
-  });
+  // const theme = createTheme({
+  //   palette: {
+  //     mode: isDarkTheme ? 'dark' : 'light',
+  //   },
+  // });
 
   const navigate = useNavigate();
 
@@ -57,11 +57,12 @@ export const NavBar = ({ resetDataLoaded }) => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    // <ThemeProvider theme={theme}>
+    //   <CssBaseline />
+    <>
       <HideOnScroll>
-        <StyledAppBar>
-          <StyledToolbar>
+        <AppBar color='secondary'>
+          <Toolbar>
             {/* <IconButton
               size="large"
               edge="start"
@@ -96,7 +97,7 @@ export const NavBar = ({ resetDataLoaded }) => {
                 </Menu> */}
               </div>
             {/* </IconButton> */}
-            <CardHeader 
+            {/* <CardHeader 
               action={
                 <FormGroup>
                   <FormControlLabel
@@ -107,12 +108,13 @@ export const NavBar = ({ resetDataLoaded }) => {
                   />
                 </FormGroup>
               }
-            />
-          </StyledToolbar>
-        </StyledAppBar>
+            /> */}
+          </Toolbar>
+        </AppBar>
       </HideOnScroll>
-      <Toolbar />
-    </ThemeProvider>
+      <Toolbar /> 
+    </>
+    // {/* </ThemeProvider /> */}
   );
 };
 

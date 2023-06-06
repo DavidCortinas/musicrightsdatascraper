@@ -4,7 +4,9 @@ import './App.css'
 import getCSRFToken from "./csrf";
 import NavBar from "./components/NavBar";
 import { Container, Grid } from "@mui/material";
+import { ThemeProvider } from '@mui/material/styles';
 import SideBar from "./components/SideBar";
+import theme from "./theme";
 
 function App() {
   const [csrfToken, setCsrfToken] = useState(null);
@@ -25,19 +27,21 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <NavBar />
-      <Grid container>
-        <Grid item xs={2}>
-          <SideBar />
-        </Grid>
-        <Grid item xs={10} position={"center"}>
-          <Container maxWidth='xl'>
-            <RoutesContainer />
-          </Container>
-        </Grid>
-      </Grid>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+          <NavBar />
+          <Grid container style={{ backgroundColor: '#fbfbfb' }}>
+            <Grid item xs={2}>
+              <SideBar />
+            </Grid>
+            <Grid item xs={10} position={"center"}>
+              <Container maxWidth='xl'>
+                <RoutesContainer />
+              </Container>
+            </Grid>
+          </Grid>
+      </div>
+    </ThemeProvider>
   );
 }
 

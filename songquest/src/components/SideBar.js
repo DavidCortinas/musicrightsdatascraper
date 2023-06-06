@@ -26,13 +26,17 @@ export const SideBar = ({ resetDataLoaded }) => {
     };
 
     const handleCollapse = () => {
-        collapse == false
+        collapse === false
         ? setCollapse(true)
         : setCollapse(false);
     };
 
     return (
-        <Sidebar style={{ height: viewHeight }} collapsed={collapse}>
+        <Sidebar 
+          style={{ height: viewHeight }} 
+          collapsed={collapse} 
+          backgroundColor='#001747'
+          >
             <Menu>
                 {/* <SubMenu label="Charts">
                 <MenuItem> Pie charts </MenuItem>
@@ -46,10 +50,11 @@ export const SideBar = ({ resetDataLoaded }) => {
                       style={{
                       transform: collapse ? 'scaleX(-1)' : 'scaleX(1)',
                       transition: 'transform 0.3s ease',
+                      color: 'white'
                       }}
                     />
                 </MenuItem>
-                <MenuItem onClick={() => handleHomeNavigation('/')}>{collapse ? <HomeIcon /> : 'Home'}</MenuItem>
+                <MenuItem style={{ color: 'white' }} onClick={() => handleHomeNavigation('/')}>{collapse ? <HomeIcon style={{ color: 'white' }}/> : 'Home'}</MenuItem>
                 <MenuItem disabled>{collapse ? <SavedSearchIcon /> : 'Saved Searches'}</MenuItem>
                 <MenuItem disabled>{collapse ? <WorkIcon /> : 'Licensing Projects'}</MenuItem>
             </Menu>
