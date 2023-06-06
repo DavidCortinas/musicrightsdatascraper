@@ -30,7 +30,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
           <NavBar />
-          <Grid container style={{ backgroundColor: '#fbfbfb' }}>
+          <Grid container style={{ backgroundColor: '#eff4f8' }}>
             <Grid item xs={2}>
               <SideBar />
             </Grid>

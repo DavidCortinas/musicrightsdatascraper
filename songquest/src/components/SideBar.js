@@ -35,7 +35,7 @@ export const SideBar = ({ resetDataLoaded }) => {
         <Sidebar 
           style={{ height: viewHeight }} 
           collapsed={collapse} 
-          backgroundColor='#001747'
+          backgroundColor='#0B1320'
           >
             <Menu>
                 {/* <SubMenu label="Charts">
