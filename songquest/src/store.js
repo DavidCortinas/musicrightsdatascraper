@@ -8,29 +8,26 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { song } from './reducers';
 
 const reducers = {
-    song,
+  song,
 };
 
 const persistConfig = {
-    key: 'root',
-    storage,
-    stateReconciler: autoMergeLevel2,
+  key: 'root',
+  storage,
+  stateReconciler: autoMergeLevel2,
 };
 
 const rootReducer = combineReducers(reducers);
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-
-export const configuredStore = () => configureStore(
-    {
-        reducer: persistedReducer,
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-            serializableCheck: {
-                ignoreActions: [PERSIST]
-            }
-        }),
-        devTools: composeWithDevTools(
-            applyMiddleware(thunk)
-        ),
-    }
-);
+export const configuredStore = () =>
+  configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoreActions: [PERSIST],
+        },
+      }),
+    devTools: composeWithDevTools(applyMiddleware(thunk)),
+  });

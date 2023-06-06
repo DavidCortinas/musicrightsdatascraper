@@ -7,7 +7,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SongForm from './SongForm';
 
 const isEmptyObject = (obj) => {
-    return Object.keys(obj).length === 0;
+  return Object.keys(obj).length === 0;
 };
 
 const Table = ({ songData }) => {
@@ -48,68 +48,81 @@ const Table = ({ songData }) => {
       {
         accessorKey: 'label',
         header: 'Label',
-      }
+      },
     ],
     []
   );
 
   const dataRows = React.useMemo(() => {
     if (!songData) {
-        return [];
+      return [];
     }
 
     const ascapResults = songData.ascap_results || {};
     const bmiResults = songData.bmi_results || {};
 
     if (isEmptyObject(ascapResults) && isEmptyObject(bmiResults)) {
-        return []
-    };
-    
+      return [];
+    }
 
     const formatPublishingResults = (arr) => {
       const flattenedArray = arr.flat();
       const lastIndex = flattenedArray.length - 1;
 
       return flattenedArray.map((item, index) => (
-          <div>
+        <div>
           {item}
-          {index !== lastIndex && <>,<br /></>}
-          </div>
+          {index !== lastIndex && (
+            <>
+              ,<br />
+            </>
+          )}
+        </div>
       ));
     };
 
+    const ascapDataRows = !isEmptyObject(ascapResults)
+      ? ascapResults.title?.map((title, index) => ({
+          song: title,
+          performer: formatPublishingResults(ascapResults.performers[index]),
+          writers: formatPublishingResults(ascapResults.writers[index]),
+          publisher: formatPublishingResults(ascapResults.publishers[index]),
+          address: formatPublishingResults(
+            ascapResults.publishers_address[index]
+          ),
+          phoneNumber: formatPublishingResults(
+            ascapResults.publishers_phone_number[index]
+          ),
+          email: formatPublishingResults(ascapResults.publishers_email[index]),
+          copyrights: ascapResults.copyrights && ascapResults.copyrights.flat(),
+          label: ascapResults.label && ascapResults.label.flat(),
+          source: 'ASCAP',
+        }))
+      : [];
 
-    const ascapDataRows = !isEmptyObject(ascapResults) ? ascapResults.title?.map((title, index) => ({
-        song: title,
-        performer: formatPublishingResults(ascapResults.performers[index]),
-        writers: formatPublishingResults(ascapResults.writers[index]),
-        publisher: formatPublishingResults(ascapResults.publishers[index]),
-        address: formatPublishingResults(ascapResults.publishers_address[index]),
-        phoneNumber: formatPublishingResults(ascapResults.publishers_phone_number[index]),
-        email: formatPublishingResults(ascapResults.publishers_email[index]),
-        copyrights: ascapResults.copyrights && ascapResults.copyrights.flat(),
-        label: ascapResults.label && ascapResults.label.flat(),
-        source: "ASCAP",
-    })) : [];
-
-    const bmiDataRows = !isEmptyObject(bmiResults) ? bmiResults.title?.map((title, index) => ({
-        song: title,
-        performer: formatPublishingResults(bmiResults.performers[index]),
-        writers: formatPublishingResults(bmiResults.writers[index]),
-        publisher: formatPublishingResults(bmiResults.publishers[index]),
-        address: formatPublishingResults(bmiResults.publishers_address[index]),
-        phoneNumber: formatPublishingResults(bmiResults.publishers_phone_number[index]),
-        email: formatPublishingResults(bmiResults.publishers_email[index]),
-        copyrights: bmiResults.copyrights && bmiResults.copyrights.flat(),
-        label: bmiResults.label && bmiResults.label.flat(),
-        source: "BMI,"
-    })) : [];
+    const bmiDataRows = !isEmptyObject(bmiResults)
+      ? bmiResults.title?.map((title, index) => ({
+          song: title,
+          performer: formatPublishingResults(bmiResults.performers[index]),
+          writers: formatPublishingResults(bmiResults.writers[index]),
+          publisher: formatPublishingResults(bmiResults.publishers[index]),
+          address: formatPublishingResults(
+            bmiResults.publishers_address[index]
+          ),
+          phoneNumber: formatPublishingResults(
+            bmiResults.publishers_phone_number[index]
+          ),
+          email: formatPublishingResults(bmiResults.publishers_email[index]),
+          copyrights: bmiResults.copyrights && bmiResults.copyrights.flat(),
+          label: bmiResults.label && bmiResults.label.flat(),
+          source: 'BMI,',
+        }))
+      : [];
 
     // const combinedDataRows = [...ascapDataRows, ...bmiDataRows];
 
     return [...ascapDataRows, ...bmiDataRows];
-    }, [songData]);
-
+  }, [songData]);
 
   return (
     <MaterialReactTable
@@ -127,19 +140,29 @@ const Table = ({ songData }) => {
         </Tooltip>
       )}
     />
-  )
+  );
 };
 
-const SongDataTable = ({ onSearchPressed, onDataLoaded, query, dataLoaded, songData }) => {
+const SongDataTable = ({
+  onSearchPressed,
+  onDataLoaded,
+  query,
+  dataLoaded,
+  songData,
+}) => {
   const queryClient = new QueryClient();
-  const showTable = !isEmptyObject(songData)
+  const showTable = !isEmptyObject(songData);
 
   return (
     <QueryClientProvider client={queryClient}>
       {showTable ? (
-        <Table songData={songData}/>
+        <Table songData={songData} />
       ) : (
-        <SongForm onSearchPressed={onSearchPressed} onDataLoaded={onDataLoaded} query={query} />
+        <SongForm
+          onSearchPressed={onSearchPressed}
+          onDataLoaded={onDataLoaded}
+          query={query}
+        />
       )}
     </QueryClientProvider>
   );

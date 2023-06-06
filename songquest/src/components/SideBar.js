@@ -9,57 +9,64 @@ import WorkIcon from '@mui/icons-material/Work';
 import { resetDataLoaded } from '../actions';
 
 export const SideBar = ({ resetDataLoaded }) => {
-    const viewHeight = window.outerHeight;
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [collapse, setCollapse] = useState(false);
+  const viewHeight = window.outerHeight;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [collapse, setCollapse] = useState(false);
 
-    useEffect(() => {
-        if (location.pathname !== '/') {
-        navigate('/');
-        }
-    }, [location.pathname, navigate]);
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+  }, [location.pathname, navigate]);
 
-    const handleHomeNavigation = (path) => {
-        resetDataLoaded();
-        navigate(path);
-    };
+  const handleHomeNavigation = (path) => {
+    resetDataLoaded();
+    navigate(path);
+  };
 
-    const handleCollapse = () => {
-        collapse === false
-        ? setCollapse(true)
-        : setCollapse(false);
-    };
+  const handleCollapse = () => {
+    collapse === false ? setCollapse(true) : setCollapse(false);
+  };
 
-    return (
-        <Sidebar 
-          style={{ height: viewHeight }} 
-          collapsed={collapse} 
-          backgroundColor='#0B1320'
-          >
-            <Menu>
-                {/* <SubMenu label="Charts">
+  return (
+    <Sidebar
+      style={{ height: viewHeight }}
+      collapsed={collapse}
+      backgroundColor="#013a57"
+    >
+      <Menu>
+        {/* <SubMenu label="Charts">
                 <MenuItem> Pie charts </MenuItem>
                 <MenuItem> Line charts </MenuItem>
                 </SubMenu> */}
-                <MenuItem
-                  onClick={() => handleCollapse()}
-                  style={{ display: 'flex', alignItems: 'center' }}
-                >
-                    <MenuOpenIcon 
-                      style={{
-                      transform: collapse ? 'scaleX(-1)' : 'scaleX(1)',
-                      transition: 'transform 0.3s ease',
-                      color: 'white'
-                      }}
-                    />
-                </MenuItem>
-                <MenuItem style={{ color: 'white' }} onClick={() => handleHomeNavigation('/')}>{collapse ? <HomeIcon style={{ color: 'white' }}/> : 'Home'}</MenuItem>
-                <MenuItem disabled>{collapse ? <SavedSearchIcon /> : 'Saved Searches'}</MenuItem>
-                <MenuItem disabled>{collapse ? <WorkIcon /> : 'Licensing Projects'}</MenuItem>
-            </Menu>
-        </Sidebar>
-    )
+        <MenuItem
+          onClick={() => handleCollapse()}
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <MenuOpenIcon
+            style={{
+              transform: collapse ? 'scaleX(-1)' : 'scaleX(1)',
+              transition: 'transform 0.3s ease',
+              color: 'white',
+            }}
+          />
+        </MenuItem>
+        <MenuItem
+          style={{ color: 'white' }}
+          onClick={() => handleHomeNavigation('/')}
+        >
+          {collapse ? <HomeIcon style={{ color: 'white' }} /> : 'Home'}
+        </MenuItem>
+        <MenuItem disabled>
+          {collapse ? <SavedSearchIcon /> : 'Saved Searches'}
+        </MenuItem>
+        <MenuItem disabled>
+          {collapse ? <WorkIcon /> : 'Licensing Projects'}
+        </MenuItem>
+      </Menu>
+    </Sidebar>
+  );
 };
 
 const mapDispatchToProps = (dispatch) => {

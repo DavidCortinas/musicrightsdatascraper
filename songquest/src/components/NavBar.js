@@ -1,6 +1,22 @@
 import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom'
-import { AppBar, CardHeader, CssBaseline, FormControlLabel, FormGroup, Grid, IconButton, Slide, Switch, Toolbar, Typography, createTheme, styled, ThemeProvider, useScrollTrigger } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  AppBar,
+  CardHeader,
+  CssBaseline,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  IconButton,
+  Slide,
+  Switch,
+  Toolbar,
+  Typography,
+  createTheme,
+  styled,
+  ThemeProvider,
+  useScrollTrigger,
+} from '@mui/material';
 import { resetDataLoaded } from '../actions';
 import { connect } from 'react-redux';
 
@@ -53,15 +69,15 @@ export const NavBar = ({ resetDataLoaded }) => {
 
   const handleNavigateToSongForm = () => {
     resetDataLoaded();
-    navigate('/', {replace: true })
-  }
+    navigate('/', { replace: true });
+  };
 
   return (
     // <ThemeProvider theme={theme}>
     //   <CssBaseline />
     <>
       <HideOnScroll>
-        <AppBar color='secondary'>
+        <AppBar color="secondary">
           <Toolbar>
             {/* <IconButton
               size="large"
@@ -71,13 +87,21 @@ export const NavBar = ({ resetDataLoaded }) => {
               onClick={handleMenu}
               sx={{ mr: 2 }}
             > */}
-              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }} onClick={handleNavigateToSongForm}>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
-                  SongQuest
-                </Typography>
-              </Link>
-              <div>
-                {/* <Menu
+            <Link
+              to="/"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+              onClick={handleNavigateToSongForm}
+            >
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1, textAlign: 'left' }}
+              >
+                SongQuest
+              </Typography>
+            </Link>
+            <div>
+              {/* <Menu
                   id="menu-appbar"
                   anchorEl={anchorEl}
                   anchorOrigin={{
@@ -95,7 +119,7 @@ export const NavBar = ({ resetDataLoaded }) => {
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                 </Menu> */}
-              </div>
+            </div>
             {/* </IconButton> */}
             {/* <CardHeader 
               action={
@@ -112,7 +136,7 @@ export const NavBar = ({ resetDataLoaded }) => {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <Toolbar /> 
+      <Toolbar />
     </>
     // {/* </ThemeProvider /> */}
   );

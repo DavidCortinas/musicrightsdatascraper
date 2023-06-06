@@ -1,7 +1,7 @@
-import { searchSongSuccess, searchSong, searchSongFailure } from "./actions";
-import getCSRFToken from "./csrf";
+import { searchSongSuccess, searchSong, searchSongFailure } from './actions';
+import getCSRFToken from './csrf';
 
-export const searchSongRequest = query => async dispatch => {
+export const searchSongRequest = (query) => async (dispatch) => {
   try {
     const csrfToken = await getCSRFToken(); // Retrieve the CSRF token
     const body = JSON.stringify({
@@ -26,17 +26,19 @@ export const searchSongRequest = query => async dispatch => {
 
     // Update the front end with the received data
     // Dispatch both searchSong and searchSongSuccess actions
-    dispatch(searchSong(songData, query, false)); 
+    dispatch(searchSong(songData, query, false));
     // Dispatch searchSong action
     dispatch(searchSongSuccess(songData, query)); // Dispatch searchSongSuccess action with the query
-    return songData
+    return songData;
   } catch (error) {
     console.log('Error: ' + error.message);
-    dispatch(searchSongFailure(error.message))
+    dispatch(searchSongFailure(error.message));
     // alert('We had trouble finding that song. Please make sure you are spelling the song correctly and enter the performer for the quickest and most accurate search result')
-    dispatch(searchSongSuccess({ascap_results: {}, bmi_results: {}}, {song: '', performer: ''}))
+    dispatch(
+      searchSongSuccess(
+        { ascap_results: {}, bmi_results: {} },
+        { song: '', performer: '' }
+      )
+    );
   }
 };
-
-
-
