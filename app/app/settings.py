@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'corsheaders',
-    'user.apps.UserConfig'
+    # 'user.apps.UserConfig'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +84,7 @@ DATABASES = {
 }
 
 # User model
-AUTH_USER_MODEL = 'user.AppUser'
+# AUTH_USER_MODEL = 'user.AppUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
