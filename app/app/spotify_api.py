@@ -1,15 +1,11 @@
 import base64
 import requests
 import spotipy
-import os
-from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from time import time
 
-load_dotenv()
-
-client_id = os.environ.get('SPOTIFY_CLIENT_ID')
-client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
+client_id = 'c1698c02315145779b659382642e0b4b'
+client_secret = '1586875dc3fc43e98e315d8f5b240ddc'
 
 client_credentials_manager = SpotifyClientCredentials(
     client_id=client_id, client_secret=client_secret)
