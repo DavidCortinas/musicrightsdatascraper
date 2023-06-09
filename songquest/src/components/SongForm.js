@@ -18,7 +18,7 @@ import { makeStyles } from '@mui/styles';
 import { searchSongRequest } from '../thunks';
 import { clearSearchSongError, searchSongSuccess } from '../actions';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   card: {
     width: '50rem',
   },
@@ -41,15 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const SongForm = ({ error, onSearchPressed, onDataLoaded, query }) => {
+export const SongForm = ({ error, onSearchPressed, onDataLoaded }) => {
   const { handleSubmit } = useForm();
   const [songValue, setSongValue] = useState('');
   const [performerValue, setPerformerValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('');
 
   const [invalidSearch, setInvalidSearch] = useState(false);
 

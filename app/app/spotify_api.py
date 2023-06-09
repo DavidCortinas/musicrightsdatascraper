@@ -1,11 +1,15 @@
 import base64
+import os
 import requests
 import spotipy
+from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from time import time
 
-client_id = 'c1698c02315145779b659382642e0b4b'
-client_secret = '1586875dc3fc43e98e315d8f5b240ddc'
+load_dotenv()
+
+client_id = os.environ.get('SPOTIFY_CLIENT_ID')
+client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 client_credentials_manager = SpotifyClientCredentials(
     client_id=client_id, client_secret=client_secret)
@@ -13,6 +17,7 @@ client_credentials_manager = SpotifyClientCredentials(
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 start_time = time()
+
 
 def get_access_token():
     # Encode the client ID and client secret as base64
@@ -44,6 +49,7 @@ def get_access_token():
         # Handle the error response
         print(f"Error: {response.status_code} - {response.text}")
         return None, None
+
 
 def get_spotify_rights(song, performer):
     start_time = time()
@@ -85,9 +91,10 @@ def get_spotify_rights(song, performer):
             else:
                 # Handle the error case
                 print("Failed to obtain access token.")
-                
+
             song_query = song.replace("'", "%2527").replace(" ", "%2B")
-            performer_query = performer.replace("'", "%2527").replace(" ", "%2520")
+            performer_query = performer.replace(
+                "'", "%2527").replace(" ", "%2520")
 
             url = f'https://api.spotify.com/v1/search?q={song_query}%2520artist%3A{performer_query}&type=track'
 
@@ -101,7 +108,8 @@ def get_spotify_rights(song, performer):
                 target_track = None
                 for track in tracks:
                     if (
-                        track['name'].lower() == song.lower() and track['artists'][0]['name'].lower() == performer.lower()
+                        track['name'].lower() == song.lower(
+                        ) and track['artists'][0]['name'].lower() == performer.lower()
                     ):
                         target_track = track
                         break
@@ -112,7 +120,8 @@ def get_spotify_rights(song, performer):
                     print('Track not found')
 
             else:
-                print(f'Request failed with status code: {response.status_code}')
+                print(
+                    f'Request failed with status code: {response.status_code}')
         except Exception as e:
             print('Spotify API Album ID Error: ', e)
 

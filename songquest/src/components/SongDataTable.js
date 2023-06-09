@@ -143,13 +143,7 @@ const Table = ({ songData }) => {
   );
 };
 
-const SongDataTable = ({
-  onSearchPressed,
-  onDataLoaded,
-  query,
-  dataLoaded,
-  songData,
-}) => {
+const SongDataTable = ({ onSearchPressed, onDataLoaded, query, songData }) => {
   const queryClient = new QueryClient();
   const showTable = !isEmptyObject(songData);
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
@@ -36,10 +36,6 @@ export const SideBar = ({ resetDataLoaded }) => {
       backgroundColor="#013a57"
     >
       <Menu>
-        {/* <SubMenu label="Charts">
-                <MenuItem> Pie charts </MenuItem>
-                <MenuItem> Line charts </MenuItem>
-                </SubMenu> */}
         <MenuItem
           onClick={() => handleCollapse()}
           style={{ display: 'flex', alignItems: 'center' }}

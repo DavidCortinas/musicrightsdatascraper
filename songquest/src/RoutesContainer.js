@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import SongForm from './components/SongForm';
 import SongDataTable from './components/SongDataTable';
 import { searchSongRequest } from './thunks';
@@ -6,13 +6,14 @@ import { connect } from 'react-redux';
 import { searchSongSuccess } from './actions';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
-const RoutesContainer = ({ query, dataLoaded, error, onSearchPressed }) => {
-  const [isLoading, setIsLoading] = useState(false);
+const RoutesContainer = ({
+  query,
+  dataLoaded,
+  error,
+  onSearchPressed,
+  onDataLoaded,
+}) => {
   const navigate = useNavigate();
-
-  const onDataLoaded = () => {
-    setIsLoading(false);
-  };
 
   useEffect(() => {
     if (dataLoaded && !error) {
