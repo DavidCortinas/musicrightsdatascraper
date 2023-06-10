@@ -49,6 +49,10 @@ const Table = ({ songData }) => {
         accessorKey: 'label',
         header: 'Label',
       },
+      {
+        accessorKey: 'source',
+        header: 'Source',
+      },
     ],
     []
   );
@@ -96,7 +100,7 @@ const Table = ({ songData }) => {
           email: formatPublishingResults(ascapResults.publishers_email[index]),
           copyrights: ascapResults.copyrights && ascapResults.copyrights.flat(),
           label: ascapResults.label && ascapResults.label.flat(),
-          source: 'ASCAP',
+          source: 'ASCAP/Spotify',
         }))
       : [];
 
@@ -115,7 +119,7 @@ const Table = ({ songData }) => {
           email: formatPublishingResults(bmiResults.publishers_email[index]),
           copyrights: bmiResults.copyrights && bmiResults.copyrights.flat(),
           label: bmiResults.label && bmiResults.label.flat(),
-          source: 'BMI,',
+          source: 'BMI/Spotify',
         }))
       : [];
 
